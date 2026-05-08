@@ -1,9 +1,9 @@
 <?php
 // Database configuration - update these values to match your MySQL setup
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');        // Your MySQL username
-define('DB_PASS', '');            // Your MySQL password
-define('DB_NAME', 'userapp');
+define('DB_USER', 'isak');        // Your MySQL username
+define('DB_PASS', 'some_pass');            // Your MySQL password
+define('DB_NAME', 'prøveeksamen');
 
 function getDB() {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
