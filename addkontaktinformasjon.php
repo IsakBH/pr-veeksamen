@@ -13,11 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $telefonnummer = $_POST['telefonnummer'];
     $adresse = $_POST['adresse'];
 
-    $sql = "INSERT INTO kontaktinformasjon (telefonnummer, adresse, bruker_id)
-            VALUES (?, ?, ?)
-            ON DUPLICATE KEY UPDATE telefonnummer = ?, adresse = ?";
+    $sql = "update kontaktinformasjon set telefonnummer = ?, adresse = ? where bruker_id = ?";
     $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("isiis", $telefonnummer, $adresse, $innlogget_id, $telefonnummer, $adresse);
+    $stmt->bind_param("isi", $telefonnummer, $adresse, $innlogget_id);
     if($stmt->execute()){
         echo "Woohoo! Det funket!";
         /*header('Location: dashboard.php');

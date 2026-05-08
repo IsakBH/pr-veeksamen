@@ -44,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $success = 'Account created! You can now log in.';
 
-                $sql = "INSERT INTO kontaktinformasjon (bruker_id, navn) VALUES (?, ?)";
+                $sql = "INSERT INTO kontaktinformasjon (bruker_id, brukernavn, navn) VALUES (?, ?, ?)";
                 $kontaktstmt = $db->prepare($sql);
 
-                $kontaktstmt->bind_param("is", $user_id, $username);
+                $kontaktstmt->bind_param("iss", $user_id, $username, $fornavn);
                 $kontaktstmt->execute();
                 $kontaktstmt->close();
             } else {
