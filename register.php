@@ -11,12 +11,14 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm_password'] ?? '';
+    $fornavn = $_POST['fornavn'];
+    $etternavn = $_POST['etternavn'];
+    $username = strtolower(substr(trim($fornavn), 0, 3) . substr(trim($etternavn), 0, 3));
 
-    if (empty($username) || empty($email) || empty($password)) {
+    if (empty($email) || empty($password)) {
         $error = 'All fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Invalid email address.';
@@ -26,17 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } else {
         $db   = getDB();
-        $stmt = $db->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
-        $stmt->bind_param("ss", $username, $email);
+        $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $error = 'Username or email already taken.';
+            $error = 'Email already taken.';
         } else {
             $hash = password_hash($password, PASSWORD_BCRYPT);
-            $ins  = $db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-            $ins->bind_param("sss", $username, $email, $hash);
+            $ins  = $db->prepare("INSERT INTO users (username, fornavn, etternavn, email, password) VALUES (?, ?, ?, ?, ?)");
+            $ins->bind_param("sssss", $username, $fornavn, $etternavn, $email, $hash);
             if ($ins->execute()) {
                 $user_id = $db->insert_id;
 
@@ -220,7 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <form method="POST">
     <div class="form-group">
       <label>Username</label>
-      <input type="text" name="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" placeholder="johndoe" required>
+      <input type="text" name="fornavn" placeholder="Isak" required>
+      <input type="text" name="etternavn" placeholder="Henriksen" required>
     </div>
     <div class="form-group">
       <label>Email</label>
