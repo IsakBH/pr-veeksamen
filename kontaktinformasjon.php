@@ -22,26 +22,26 @@ $user_role = $role_result->fetch_assoc()['navn'] ?? 'Ingen';
 // 2. Bestem SQL-spørring basert på rettigheter
 if ($user_role === 'Admin') {
     // Admin: Se alt (Full lese-tilgang)
-    $sql = "SELECT users.id, kontaktinformasjon.navn, kontaktinformasjon.adresse, kontaktinformasjon.telefonnummer, datamaskin.modell, datamaskin.serienummer
+    $sql = "SELECT users.id, kontaktinformasjon.navn, kontaktinformasjon.adresse, kontaktinformasjon.telefonnummer, datamaskiner.modell, datamaskiner.serienummer
             FROM users
             LEFT JOIN kontaktinformasjon ON users.id = kontaktinformasjon.bruker_id
-            LEFT JOIN datamaskiner ON users.id = datamaskin.disponert_til";
+            LEFT JOIN datamaskiner ON users.id = datamaskiner.disponert_til";
     $result = $conn->query($sql);
 }
 elseif ($user_role === 'IT-medarbeider') {
     // IT: Se kun navn og maskinvare (Skjult kontaktinfo)
-    $sql = "SELECT users.id, kontaktinformasjon.navn, 'SKJERMET' AS adresse, 'SKJERMET' AS telefonnummer, datamaskin.modell, datamaskin.serienummer
+    $sql = "SELECT users.id, kontaktinformasjon.navn, 'SKJERMET' AS adresse, 'SKJERMET' AS telefonnummer, datamaskiner.modell, datamaskiner.serienummer
             FROM users
             LEFT JOIN kontaktinformasjon ON users.id = kontaktinformasjon.bruker_id
-            LEFT JOIN datamaskiner ON users.id = datamaskin.disponert_til";
+            LEFT JOIN datamaskiner ON users.id = datamaskiner.disponert_til";
     $result = $conn->query($sql);
 }
 else {
     // Vanlig bruker: Se kun sin egen info
-    $sql = "SELECT users.id, kontaktinformasjon.navn, kontaktinformasjon.adresse, kontaktinformasjon.telefonnummer, datamaskin.modell, datamaskin.serienummer
+    $sql = "SELECT users.id, kontaktinformasjon.navn, kontaktinformasjon.adresse, kontaktinformasjon.telefonnummer, datamaskiner.modell, datamaskiner.serienummer
             FROM users
             LEFT JOIN kontaktinformasjon ON users.id = kontaktinformasjon.bruker_id
-            LEFT JOIN datamaskiner ON users.id = datamaskin.disponert_til
+            LEFT JOIN datamaskiner ON users.id = datamaskiner.disponert_til
             WHERE users.id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $innlogget_id);
