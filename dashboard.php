@@ -277,7 +277,9 @@ $db->close();
 <body>
 
 <nav>
-  <div class="logo">UserApp</div> <button><a href="kontaktinformasjon.php">Se kontaktinformasjon</a></button>
+  <div class="logo">UserApp</div>
+    <button><a href="kontaktinformasjon.php">Se kontaktinformasjon</a></button>
+    <button><a href="addkontaktinformasjon.php">Endre kontaktinformasjon</a></button>
   <div class="nav-right">
     <div class="nav-user">Signed in as <span><?= htmlspecialchars($_SESSION['username']) ?></span></div>
     <a href="logout.php" class="btn-logout">Log out</a>

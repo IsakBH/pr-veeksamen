@@ -13,12 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $telefonnummer = $_POST['telefonnummer'];
     $adresse = $_POST['adresse'];
 
-    $sql = "update kontaktinformasjon set telefonnummer = ?, adresse = ? where bruker_id = ?";
+    $sql = "INSERT INTO kontaktinformasjon (telefonnummer, adresse, bruker_id)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE telefonnummer = ?, adresse = ?";
     $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("isi", $telefonnummer, $adresse, $innlogget_id);
+    $stmt->bind_param("isiis", $telefonnummer, $adresse, $innlogget_id, $telefonnummer, $adresse);
     if($stmt->execute()){
-        header('Location: dashboard.php');
-        exit;
+        echo "Woohoo! Det funket!";
+        /*header('Location: dashboard.php');
+        exit;*/
     } else {
         echo "Oops";
     }
