@@ -18,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $stmt->bind_param("isi", $telefonnummer, $adresse, $innlogget_id);
     if($stmt->execute()){
         echo "Woohoo! Det funket!";
-        /*header('Location: dashboard.php');
-        exit;*/
+        sleep(2);
+        header('Location: dashboard.php');
+        exit;
     } else {
         echo "Oops";
     }
