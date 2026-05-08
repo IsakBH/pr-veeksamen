@@ -38,7 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ins  = $db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
             $ins->bind_param("sss", $username, $email, $hash);
             if ($ins->execute()) {
+                $user_id = $db->insert_id;
+
                 $success = 'Account created! You can now log in.';
+
+                $sql = "INSERT INTO kontaktinformasjon (bruker_id, navn) VALUES (?, ?)";
+                $kontaktstmt = $db->prepare($sql);
+
+                $kontaktstmt->bind_param("is", $user_id, $username);
+                $kontaktstmt->execute();
+                $kontaktstmt->close();
             } else {
                 $error = 'Registration failed. Please try again.';
             }
