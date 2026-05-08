@@ -18,6 +18,7 @@ $role_stmt->bind_param("i", $innlogget_id);
 $role_stmt->execute();
 $role_result = $role_stmt->get_result();
 $user_role = $role_result->fetch_assoc()['navn'] ?? 'Ingen';
+$_SESSION['bruker_rolle'] = $user_role;
 
 // 2. Bestem SQL-spørring basert på rettigheter
 if ($user_role === 'Admin') {
